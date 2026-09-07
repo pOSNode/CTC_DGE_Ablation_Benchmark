@@ -11,6 +11,7 @@ BENCH_ROOT <- Sys.getenv("BENCH_ROOT",
 suppressPackageStartupMessages({library(edgeR); library(parallel)})
 source(file.path(BENCH_ROOT, "sim/simulate_ctc.R"))
 source(file.path(BENCH_ROOT, "bench/arms.R"))
+source(file.path(BENCH_ROOT, "bench/external_arms.R"))
 source(file.path(BENCH_ROOT, "bench/score.R"))
 
 args    <- commandArgs(trailingOnly = TRUE)
@@ -53,7 +54,14 @@ grid_purity$purity_sd   <- 0.15
 grid_purity$n_per_group <- 5L
 grid_purity$arms <- I(rep(list(names(purity_arms)), nrow(grid_purity)))
 
-grids <- list(main = grid_main, batch = grid_batch, exclusive = grid_excl,
+# comparators: the CTC pipeline against the three most-used bulk DE tools,
+# each at its own documented defaults
+grid_comparators <- data.frame(n_per_group = c(3L, 5L, 8L))
+grid_comparators$arms <- I(rep(list(c("ctc_pipeline", "edger_default",
+                                      "limma_voom", "deseq2")),
+                               nrow(grid_comparators)))
+
+grids <- list(comparators = grid_comparators, main = grid_main, batch = grid_batch, exclusive = grid_excl,
               depth = grid_depth, null = grid_null, purity = grid_purity)
 stopifnot(exp_nm %in% names(grids))
 grid <- grids[[exp_nm]]
@@ -70,6 +78,20 @@ run_scenario_rep <- function(row, rep_i) {
   sim <- do.call(simulate_ctc, sim_args)
   arm_set <- if (exp_nm == "purity") purity_arms else benchmark_arms
   out <- lapply(grid$arms[[row]], function(a) {
+    # arms implemented by another package run through their own entry point;
+    # every arm returns the same structure, so scoring is identical
+    if (a %in% names(external_arms)) {
+      r <- tryCatch(suppressMessages(
+             external_arms[[a]](sim$counts, sim$samples,
+                                list(fdr_cutoff = 0.05))),
+           error = function(e) NULL)
+      if (is.null(r)) return(NULL)
+      s <- score_arm(r, sim$truth)
+      s$arm <- a; s$rep <- rep_i; s$scenario_row <- row
+      for (nm in setdiff(names(grid), "arms")) s[[nm]] <- grid[[nm]][row]
+      s$median_lib <- median(colSums(sim$counts))
+      return(s)
+    }
     pars <- arm_set[[a]]
     # purity is estimated from the counts; the simulator supplies only the
     # compartment marker sets, never the true purity values
