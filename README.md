@@ -1,5 +1,7 @@
 # Ablation benchmark for low-input CTC RNA-seq differential expression
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22646903.svg)](https://doi.org/10.5281/zenodo.22646903)
+
 Ground-truth simulation and one-at-a-time ablation of every documented design
 decision in [`Rare_CTC_RNA_DGE_Pipeline`](https://github.com/pOSNode/Rare_CTC_RNA_DGE_Pipeline).
 
