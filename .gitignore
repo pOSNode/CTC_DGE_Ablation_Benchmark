@@ -1,0 +1,13 @@
+# Third-party data, fetched by realdata/load_gse67980.R on first use
+realdata/*.txt.gz
+
+# R
+.Rhistory
+.RData
+.Rproj.user/
+
+# macOS
+.DS_Store
+
+# the pipeline under test is a separate repository
+pipeline/
