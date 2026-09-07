@@ -1,0 +1,35 @@
+{
+  "title": "CTC_DGE_Ablation_Benchmark: ground-truth simulation and ablation benchmark for low-input CTC RNA-seq differential expression",
+  "description": "<p>Ground-truth simulation, real-data validation and one-at-a-time ablation of every documented design decision in the Rare_CTC_RNA_DGE_Pipeline.</p><p>Contains a negative-binomial simulator with capture dropout, a leukocyte compartment and per-sample tumour purity, calibrated to CTC data and validated under a complete null before use; twelve benchmark arms across six simulation experiments; permutation-null designs on real prostate CTC data (GEO accession GSE67980); the seven publication figures; and the manuscript together with a script that recomputes every numerical value quoted in it directly from the result tables.</p>",
+  "upload_type": "software",
+  "license": "mit",
+  "creators": [
+    {
+      "name": "Siddiqi, Owais",
+      "orcid": "0009-0006-4754-8200",
+      "affiliation": "Independent researcher, London, United Kingdom"
+    }
+  ],
+  "keywords": [
+    "circulating tumour cells",
+    "low-input RNA-seq",
+    "differential expression",
+    "benchmarking",
+    "ablation study",
+    "batch effects",
+    "tumour purity",
+    "edgeR"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/pOSNode/Rare_CTC_RNA_DGE_Pipeline",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    },
+    {
+      "identifier": "10.1038/nature14897",
+      "relation": "references",
+      "scheme": "doi"
+    }
+  ]
+}
