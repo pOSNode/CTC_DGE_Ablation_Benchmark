@@ -7,6 +7,14 @@ suppressPackageStartupMessages({
   library(ggplot2); library(patchwork); library(scales)
 })
 
+# Journals want vector art or >=300 dpi raster. Emit both from one call.
+save_fig <- function(name, plot, width, height) {
+  ggsave(file.path(FIG, paste0(name, ".png")), plot, width = width,
+         height = height, dpi = 300, bg = "white")
+  ggsave(file.path(FIG, paste0(name, ".pdf")), plot, width = width,
+         height = height, device = cairo_pdf, bg = "white")
+}
+
 ROOT <- Sys.getenv("BENCH_ROOT", "/Users/owaissiddiqi/Documents/methods_paper")
 FIG  <- file.path(ROOT, "figures")
 
@@ -103,8 +111,7 @@ fig1 <- function() {
 
   combined <- (p1 / p2) + plot_layout(guides = "collect") &
     theme(legend.position = "top")
-  ggsave(file.path(FIG, "fig1_main_arms.png"), combined, width = 9.5,
-         height = 8.5, dpi = 300, bg = "white")
+  save_fig("fig1_main_arms", combined, width = 9.5, height = 8.5)
   cat("fig1 written\n")
 }
 
@@ -141,8 +148,7 @@ fig2 <- function() {
          caption = paste("Additive batch modelling holds at or below nominal;",
                          "removeBatchEffect does not.")) +
     theme_ctc()
-  ggsave(file.path(FIG, "fig2_batch.png"), p, width = 8, height = 4.2,
-         dpi = 300, bg = "white")
+  save_fig("fig2_batch", p, width = 8, height = 4.2)
   cat("fig2 written\n")
 }
 
@@ -187,8 +193,7 @@ fig3 <- function() {
                          "genes that are zero in one condition by chance.")) +
     theme_ctc()
 
-  ggsave(file.path(FIG, "fig3_exclusive.png"), pA / pB, width = 8, height = 7,
-         dpi = 300, bg = "white")
+  save_fig("fig3_exclusive", pA / pB, width = 8, height = 7)
   cat("fig3 written\n")
 }
 
@@ -228,8 +233,7 @@ fig4 <- function() {
                          "to it yields a cutoff of min_cpm / medianLib x 1e6.")) +
     theme_ctc()
 
-  ggsave(file.path(FIG, "fig4_depth.png"), pA / pB, width = 8, height = 7,
-         dpi = 300, bg = "white")
+  save_fig("fig4_depth", pA / pB, width = 8, height = 7)
   cat("fig4 written\n")
 }
 
@@ -252,8 +256,7 @@ fig5 <- function() {
          title = "Calibration under a complete null",
          subtitle = "50 simulations with zero differentially expressed genes") +
     theme_ctc()
-  ggsave(file.path(FIG, "fig5_null.png"), p, width = 9.5, height = 4.5,
-         dpi = 300, bg = "white")
+  save_fig("fig5_null", p, width = 9.5, height = 4.5)
   cat("fig5 written\n")
 }
 
@@ -288,8 +291,7 @@ fig6 <- function() {
                          "the confound; entering purity in the\ndesign matrix holds",
                          "at nominal and costs almost nothing when no confounding exists.")) +
     theme_ctc()
-  ggsave(file.path(FIG, "fig6_purity.png"), p, width = 8, height = 4.6,
-         dpi = 300, bg = "white")
+  save_fig("fig6_purity", p, width = 8, height = 4.6)
   cat("fig6 written\n")
 }
 
@@ -323,8 +325,7 @@ fig7 <- function() {
                          "unconfirmed candidates, and places primary tumours below",
                          "CTCs as stromal infiltrate predicts.")) +
     theme_ctc()
-  ggsave(file.path(FIG, "fig7_real_purity.png"), p, width = 8, height = 4.4,
-         dpi = 300, bg = "white")
+  save_fig("fig7_real_purity", p, width = 8, height = 4.4)
   cat("fig7 written\n")
 }
 
