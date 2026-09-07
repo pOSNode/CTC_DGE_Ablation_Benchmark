@@ -54,10 +54,11 @@ realdata/                 GSE67980 loader and real-data experiments
 bench/arms.R              the 12 arms (pipeline, defaults, 7 ablations, 2 batch variants)
 bench/score.R             sensitivity / empirical FDR / average precision
 bench/run_benchmark.R     driver:  Rscript bench/run_benchmark.R <experiment> [reps] [cores]
-figures/make_figures.R    all five publication figures
-results/*.csv             per-replicate results (3,650 simulated experiments)
-manuscript/manuscript.md  the paper
-pipeline/                 the pipeline under test (submodule/clone)
+figures/make_figures.R    all seven publication figures
+results/*.csv             per-replicate results
+bench/verify_numbers.R    recomputes every value quoted in the paper from the
+                          result tables and fails on any mismatch
+pipeline/                 the pipeline under test (separate repository)
 ```
 
 ## Reproducing
@@ -71,6 +72,7 @@ for e in rd1 rd2 rd3; do
   Rscript realdata/run_realdata.R $e 50 8   # downloads GSE67980 on first use
 done
 Rscript figures/make_figures.R
+Rscript bench/verify_numbers.R
 ```
 
 Every replicate records its seed, so any individual simulation can be regenerated

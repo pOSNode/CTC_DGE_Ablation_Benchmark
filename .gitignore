@@ -11,3 +11,9 @@ realdata/*.txt.gz
 
 # the pipeline under test is a separate repository
 pipeline/
+
+# Manuscript and submission package are kept out of version control:
+# a pre-submission manuscript, cover letter and editor-facing checklist
+# should not be public.
+manuscript/
+submission/
